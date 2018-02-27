@@ -17,14 +17,14 @@
 #define PIN_OUTPUT 3
 
 //Define Variables we'll be connecting to
-double Setpoint, Input, Output;
+double setpoint, input, output;
 
 //Define the aggressive and conservative Tuning Parameters
 double aggKp=4, aggKi=0.2, aggKd=1;
 double consKp=1, consKi=0.05, consKd=0.25;
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
+PID myPID(&input, &output, &setpoint, consKp, consKi, consKd, DIRECT);
 double power = 20, mass = 5, distance = 0, speed = 0, force, maxForce, constForce = 0;
 unsigned long lastUpdate, lastPrint;
 
@@ -54,8 +54,8 @@ void setup()
 {
   Serial.begin(9600);
   //initialize the variables we're linked to
-  Input = analogRead(PIN_INPUT);
-  Setpoint = 10;
+  //input = analogRead(PIN_INPUT);
+  setpoint = 10;
   lastUpdate = millis();
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
@@ -63,17 +63,17 @@ void setup()
 
 void loop(){
   
-  Input = updatePosition();
+  input = updatePosition();
   if (millis() - lastPrint > 1000){
-    Serial.println(Input);
-    Serial.println(Output);
+    Serial.println(input);
+    Serial.println(output);
     Serial.println(force);
     Serial.println();
     lastPrint = millis();
   }
   //Serial.println("test");
   if (Console.available() > 0){
-    Setpoint = Console.read();
+    setpoint = Console.read();
   }
 
   double gap = abs(Setpoint-Input); //distance away from setpoint
@@ -88,5 +88,5 @@ void loop(){
   }
 
   myPID.Compute();
-  updateForce(Output);
+  updateForce(output);
 }
