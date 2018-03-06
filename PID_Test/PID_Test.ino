@@ -64,11 +64,11 @@ void setup()
 void loop(){
   
   input = updatePosition();
-  if (millis() - lastPrint > 1000){
+  if (millis() - lastPrint > 0){
     Serial.println(input);
-    Serial.println(output);
-    Serial.println(force);
-    Serial.println();
+    //Serial.println(output);
+    //Serial.println(force);
+    //Serial.println();
     lastPrint = millis();
   }
   //Serial.println("test");
@@ -76,7 +76,7 @@ void loop(){
     setpoint = Console.read();
   }
 
-  double gap = abs(Setpoint-Input); //distance away from setpoint
+  double gap = abs(setpoint-input); //distance away from setpoint
   if (gap < 10)
   {  //we're close to setpoint, use conservative tuning parameters
     myPID.SetTunings(consKp, consKi, consKd);
